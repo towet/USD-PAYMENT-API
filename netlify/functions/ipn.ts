@@ -9,7 +9,8 @@ const supabase = createClient(supabaseUrl!, supabaseKey!);
 const allowedOrigins = [
   'https://visa-expert.netlify.app',
   'https://global-visa-experts.netlify.app',
-  'https://global-visa-experts-canada.netlify.app'
+  'https://global-visa-experts-canada.netlify.app',
+  'http://localhost:3000'
 ];
 
 export const handler: Handler = async (event) => {

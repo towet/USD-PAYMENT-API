@@ -8,7 +8,8 @@ const consumer_secret = 'XWnqyb3y0rNi08lT7MgSLL3j1mU=';
 const allowedOrigins = [
   'https://visa-expert.netlify.app',
   'https://global-visa-experts.netlify.app',
-  'https://global-visa-experts-canada.netlify.app'
+  'https://global-visa-experts-canada.netlify.app',
+  'http://localhost:3000'
 ];
 
 export const handler: Handler = async (event) => {
