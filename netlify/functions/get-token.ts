@@ -62,6 +62,11 @@ export const handler: Handler = async (event) => {
 
     console.log('Token response:', response.data);
 
+    if (!response.data.token) {
+      console.error('Invalid token response:', response.data);
+      throw new Error('Invalid token response from Pesapal');
+    }
+
     return {
       statusCode: 200,
       headers: {
@@ -72,11 +77,12 @@ export const handler: Handler = async (event) => {
       },
       body: JSON.stringify(response.data)
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error getting token:', {
       error_message: error.message,
       response_data: error.response?.data,
-      response_status: error.response?.status
+      response_status: error.response?.status,
+      stack: error.stack
     });
     
     return {
@@ -89,7 +95,8 @@ export const handler: Handler = async (event) => {
       },
       body: JSON.stringify({
         error: 'Failed to get token',
-        details: error.response?.data || error.message
+        details: error.response?.data || error.message,
+        status: error.response?.status || 500
       })
     };
   }
