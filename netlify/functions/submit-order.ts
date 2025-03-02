@@ -10,7 +10,15 @@ const allowedOrigins = [
 
 export const handler: Handler = async (event) => {
   const origin = event.headers.origin || '';
-  const allowedOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+  const allowedOrigin = allowedOrigins.includes(origin) ? origin : '';
+
+  // If origin is not allowed, return 403
+  if (!allowedOrigin) {
+    return {
+      statusCode: 403,
+      body: JSON.stringify({ error: 'Origin not allowed' })
+    };
+  }
 
   // Handle OPTIONS preflight request
   if (event.httpMethod === 'OPTIONS') {
@@ -20,7 +28,6 @@ export const handler: Handler = async (event) => {
         'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Max-Age': '86400'
       },
       body: ''
@@ -96,8 +103,7 @@ export const handler: Handler = async (event) => {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Credentials': 'true'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
       },
       body: JSON.stringify(submitResponse.data)
     };
@@ -114,8 +120,7 @@ export const handler: Handler = async (event) => {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Credentials': 'true'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
       },
       body: JSON.stringify({ 
         error: 'Failed to submit order',
