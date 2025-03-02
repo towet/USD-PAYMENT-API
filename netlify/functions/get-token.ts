@@ -13,12 +13,14 @@ const allowedOrigins = [
 
 export const handler: Handler = async (event) => {
   const origin = event.headers.origin || '';
-  const allowedOrigin = allowedOrigins.includes(origin) ? origin : '';
-
-  // If origin is not allowed, return 403
-  if (!allowedOrigin) {
+  
+  // Check if origin is allowed
+  if (!allowedOrigins.includes(origin)) {
     return {
       statusCode: 403,
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ error: 'Origin not allowed' })
     };
   }
@@ -28,7 +30,7 @@ export const handler: Handler = async (event) => {
     return {
       statusCode: 204,
       headers: {
-        'Access-Control-Allow-Origin': allowedOrigin,
+        'Access-Control-Allow-Origin': origin,
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Max-Age': '86400'
@@ -63,7 +65,7 @@ export const handler: Handler = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': allowedOrigin,
+        'Access-Control-Allow-Origin': origin,
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
       },
@@ -80,7 +82,7 @@ export const handler: Handler = async (event) => {
       statusCode: error.response?.status || 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': allowedOrigin,
+        'Access-Control-Allow-Origin': origin,
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
       },
